@@ -253,6 +253,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstParent: {fileID: 0}
   canvas: {fileID: 0}
+  showRayCastResult: 1
+  showRayCastResultParents: 0
   DestinationAreaTag: DropArea
 --- !u!1 &7229700692367703008
 GameObject:

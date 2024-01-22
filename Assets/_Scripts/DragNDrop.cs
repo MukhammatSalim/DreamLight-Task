@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -11,6 +9,9 @@ public class DragNDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
     Vector3 Offset;
     CanvasGroup canvasGroup;
     Image image;
+    [Header("Debugging")]
+    [SerializeField] bool showRayCastResult;
+    [SerializeField] bool showRayCastResultParents;
     [SerializeField] string DestinationAreaTag = "Drop Area";
     void Awake()
     {
@@ -40,43 +41,19 @@ public class DragNDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
     public void OnPointerUp(PointerEventData eventData)
     {
         RaycastResult raycastResult = eventData.pointerCurrentRaycast;
-        Debug.Log(raycastResult.gameObject);
-        Debug.Log(raycastResult.gameObject?.transform.parent.parent);
-        switch (raycastResult.gameObject?.name)
-        {
-            case "ViewPort":
-                {
-                    TransferFromViewPortToContent(raycastResult);
-                    break;
-                }
-            case "txt_Number":
-                {
-                    TransferFromElementToContent(raycastResult);
-                    break;
-                }
-            case "txt_Text":
-                {
-                    TransferFromElementToContent(raycastResult);
-                    break;
-                }
-            default :{
-                gameObject.transform.SetParent(firstParent);
-                break;
-            }
 
-        }
+        if (showRayCastResult == true) Debug.Log(raycastResult.gameObject);
+        if (showRayCastResultParents == true) Debug.Log(raycastResult.gameObject?.transform.parent.parent);
+
         if (raycastResult.gameObject?.tag == DestinationAreaTag)
-        {
             TransferFromViewPortToContent(raycastResult);
-        }
+        else if (raycastResult.gameObject?.transform.parent.tag == DestinationAreaTag)
+            TransferFromPanelToContent(raycastResult);
+        else if (raycastResult.gameObject?.transform.parent.parent.tag == DestinationAreaTag)
+            TransferFromTextToContent(raycastResult);
         else
-        {
-            if (raycastResult.gameObject?.transform.parent.parent.tag == DestinationAreaTag)
-                TransferFromElementToContent(raycastResult);
-            else
-                gameObject.transform.SetParent(firstParent);
-
-        }
+            gameObject.transform.SetParent(firstParent);
+            
         image.maskable = true;
         canvasGroup.alpha = 1.0f;
         canvasGroup.blocksRaycasts = true;
@@ -88,9 +65,13 @@ public class DragNDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
         gameObject.transform.SetParent(raycastResult.gameObject?.transform.GetChild(0));
     }
 
-    void TransferFromElementToContent(RaycastResult raycastResult)
+    void TransferFromTextToContent(RaycastResult raycastResult)
     {
         gameObject.transform.SetParent(raycastResult.gameObject?.transform.parent.parent);
+    }
+    void TransferFromPanelToContent(RaycastResult raycastResult)
+    {
+        gameObject.transform.SetParent(raycastResult.gameObject?.transform.parent);
     }
 
 

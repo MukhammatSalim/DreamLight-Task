@@ -14,20 +14,19 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        _interactiveElements = GameObject.FindGameObjectsWithTag("UI_Element");
         GenerateContent(maxNumber);
-        RandomizeContent(); //Позже убрать на кнопку
+        _interactiveElements = GameObject.FindGameObjectsWithTag("UI_Element");
+        RandomizeContent(maxNumber); //Позже убрать на кнопку
     }
 
-    public void RandomizeContent()
+    public void RandomizeContent(int number)
     {
         foreach (GameObject element in _interactiveElements)
         {
             TMP_Text _numberToChange;
-            GameObject _elementText = element.transform.GetChild(0).gameObject;
             GameObject _elementNumber = element.transform.GetChild(1).gameObject;
             _numberToChange = _elementNumber.GetComponent<TMP_Text>();
-            _numberToChange.text = (Random.Range(0,maxNumber)).ToString();
+            _numberToChange.text = (Random.Range(0,number)).ToString();
         }
     }
     public void GenerateContent(int number){
