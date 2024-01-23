@@ -8,8 +8,9 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] int maxNumber;
     [SerializeField] GameObject[] _interactiveElements;
-    [SerializeField] GameObject leftViewPort;
-    [SerializeField] GameObject RightViewPort;
+    [SerializeField] GameObject leftContent;
+    [SerializeField] GameObject RightContent;
+    [SerializeField] Transform Canvas;
     public GameObject InteractableUIElement;
 
     private void Awake()
@@ -31,9 +32,15 @@ public class UIManager : MonoBehaviour
     }
     public void GenerateContent(int number){
         for (int i = 0; i < number; i++){
-            Instantiate(InteractableUIElement, leftViewPort.transform);
-            Instantiate(InteractableUIElement, RightViewPort.transform);
+            CreateElement(InteractableUIElement, leftContent.transform,Canvas);
+            CreateElement(InteractableUIElement, RightContent.transform,Canvas);
 
         }
+    }
+
+    void CreateElement(GameObject prefab, Transform parent, Transform mainCanvas){
+        GameObject NewElement = Instantiate(prefab, parent);
+        DragNDrop NewElementDND = NewElement.GetComponent<DragNDrop>();
+        NewElementDND.Canvas = mainCanvas;
     }
 }
