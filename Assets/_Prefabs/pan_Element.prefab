@@ -117,11 +117,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f557d9ed4c2ae43b7e71506e9f6c8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstParent: {fileID: 0}
   Canvas: {fileID: 0}
-  showRayCastResult: 1
-  showRayCastResultParents: 0
-  DestinationAreaTag: DropArea
+  EmptyElementPrefab: {fileID: 0}
+  showRayCastResult: 0
+  DebugAssignToContent: 0
+  showComparison: 0
+  showEmptyPanelCreation: 1
 --- !u!1 &3429863025295568980
 GameObject:
   m_ObjectHideFlags: 0
