@@ -153,12 +153,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxNumber: 5
-  _interactiveElements: []
   leftContent: {fileID: 1725358485}
   RightContent: {fileID: 568251798}
   Canvas: {fileID: 214886181}
-  InteractableUIElement: {fileID: 2340845101663316572, guid: b0369c0bf6b4e064ab0e657f11d6ff07, type: 3}
-  EmptyUIElement: {fileID: 5298799952526341448, guid: 434162f50e047544e9430d92723c1a3a, type: 3}
+  PanelPrefab: {fileID: 2340845101663316572, guid: b0369c0bf6b4e064ab0e657f11d6ff07, type: 3}
+  BlankPanelPrefab: {fileID: 5298799952526341448, guid: 434162f50e047544e9430d92723c1a3a, type: 3}
+  leftList: []
+  rightList: []
 --- !u!4 &105413847
 Transform:
   m_ObjectHideFlags: 0

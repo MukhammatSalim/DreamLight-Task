@@ -1,25 +1,33 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] int maxNumber;
-    [SerializeField] GameObject[] _interactiveElements;
     [SerializeField] GameObject leftContent;
     [SerializeField] GameObject RightContent;
     [SerializeField] Transform Canvas;
-    public GameObject InteractableUIElement;
-    public GameObject EmptyUIElement;
+    public GameObject PanelPrefab;
+    public GameObject BlankPanelPrefab;
+    [SerializeField] List<GameObject> leftList;
+    [SerializeField] List<GameObject> rightList;
 
     private void Awake()
     {
         GenerateContent(maxNumber);
-        _interactiveElements = GameObject.FindGameObjectsWithTag("UI_Element");
         RandomizeContent(maxNumber); //Позже убрать на кнопку
     }
 
     public void RandomizeContent(int number)
     {
-        foreach (GameObject element in _interactiveElements)
+        foreach (GameObject element in leftList)
+        {
+            TMP_Text _numberToChange;
+            GameObject _elementNumber = element.transform.GetChild(1).gameObject;
+            _numberToChange = _elementNumber.GetComponent<TMP_Text>();
+            _numberToChange.text = (Random.Range(0, number)).ToString();
+        }
+        foreach (GameObject element in rightList)
         {
             TMP_Text _numberToChange;
             GameObject _elementNumber = element.transform.GetChild(1).gameObject;
@@ -31,17 +39,17 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < number; i++)
         {
-            CreateElement(InteractableUIElement, leftContent.transform, Canvas);
-            CreateElement(InteractableUIElement, RightContent.transform, Canvas);
-
+            CreateElement(PanelPrefab, leftContent.transform, leftList);
+            CreateElement(PanelPrefab, RightContent.transform, rightList);
         }
     }
 
-    void CreateElement(GameObject prefab, Transform parent, Transform mainCanvas)
+    void CreateElement(GameObject prefab, Transform parent, List<GameObject> list)
     {
         GameObject NewElement = Instantiate(prefab, parent);
         DragNDrop NewElementDND = NewElement.GetComponent<DragNDrop>();
-        NewElementDND.Canvas = mainCanvas;
-        NewElementDND.EmptyElementPrefab = EmptyUIElement;
+        NewElementDND.Canvas = Canvas;
+        NewElementDND.EmptyElementPrefab = BlankPanelPrefab;
+        list.Add(NewElement);
     }
 }

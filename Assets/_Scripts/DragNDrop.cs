@@ -48,7 +48,7 @@ public class DragNDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
                 else 
                 {
                     Destroy(EmptyElement);
-                    //EmptyElement = createBlankSpace(EmptyElementPrefab, savedPanel.transform);
+                    EmptyElement = createBlankSpace(EmptyElementPrefab, savedPanel.transform.parent);
                 }
                 savedPanel = GetElementPanel(raycastResult.gameObject);
                 //CreateBlankSpaceAbove(savedPanel.transform);
@@ -136,13 +136,6 @@ public class DragNDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
         }
         return null;
     }
-    void InsertBlankSpaceAbove(Transform panel)
-    {
-        for (int i = panel.parent.childCount - 1; i > GetObjectChildIndex(panel); i--)
-        {
-            Swap(panel.parent.GetChild(i), panel.parent.GetChild(i - 1));
-        }
-    }
 
     int GetObjectChildIndex(Transform panel)
     {
@@ -152,23 +145,12 @@ public class DragNDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoin
         }
         return 0;
     }
-    public void Swap(Transform first, Transform second)
-    {
-        Transform temp = first;
-        first = second;
-        second = temp;
-    }
     GameObject createBlankSpace(GameObject emptyElement, Transform content)
     {
         GameObject NewBlankElement = Instantiate(emptyElement, content);
         return NewBlankElement;
     }
 
-    void CreateBlankSpaceAbove(Transform targetObject)
-    {
-        createBlankSpace(EmptyElementPrefab, targetObject.parent);
-        InsertBlankSpaceAbove(targetObject);
-    }
     bool checkForNewElement(RaycastResult raycastResult) 
     {
         if(GetElementPanel(raycastResult.gameObject) == GetElementPanel(savedPanel.gameObject)) 
