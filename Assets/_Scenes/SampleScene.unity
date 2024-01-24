@@ -152,14 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19b86585cb38c8945994edfa2c9ccc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNumber: 5
-  leftContent: {fileID: 1725358485}
-  RightContent: {fileID: 568251798}
-  Canvas: {fileID: 214886181}
-  PanelPrefab: {fileID: 2340845101663316572, guid: b0369c0bf6b4e064ab0e657f11d6ff07, type: 3}
-  BlankPanelPrefab: {fileID: 5298799952526341448, guid: 434162f50e047544e9430d92723c1a3a, type: 3}
-  leftList: []
-  rightList: []
+  numberOfItemsToGenerate: 5
+  PanelPrefab: {fileID: 1867944850228943992, guid: a097d73ceb1d11341ad9827d501df918, type: 3}
+  BlankPanelPrefab: {fileID: 5835420946140525768, guid: 8afb1a798d3c3f6459782bc412d4366d, type: 3}
+  LeftContent: {fileID: 1725358486}
+  RightContent: {fileID: 568251799}
 --- !u!4 &105413847
 Transform:
   m_ObjectHideFlags: 0

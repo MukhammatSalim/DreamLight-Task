@@ -1,55 +1,73 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] int maxNumber;
-    [SerializeField] GameObject leftContent;
-    [SerializeField] GameObject RightContent;
-    [SerializeField] Transform Canvas;
+    [Header("Content Generation")]
+    [SerializeField] int numberOfItemsToGenerate;
+
+    [Header("Prefabs")]
     public GameObject PanelPrefab;
     public GameObject BlankPanelPrefab;
-    [SerializeField] List<GameObject> leftList;
-    [SerializeField] List<GameObject> rightList;
 
-    private void Awake()
+    [Header("List related")]
+    public Transform LeftContent;
+    public Transform RightContent;
+
+    [Header("Checks")]
+    GameObject BlankPanel;
+
+    private void Start()
     {
-        GenerateContent(maxNumber);
-        RandomizeContent(maxNumber); //Позже убрать на кнопку
+        GeneratePanels(PanelPrefab);
     }
-
-    public void RandomizeContent(int number)
+    void GeneratePanels(GameObject panelPrefab)
     {
-        foreach (GameObject element in leftList)
+        for (int i = 0; i < numberOfItemsToGenerate; i++)
         {
-            TMP_Text _numberToChange;
-            GameObject _elementNumber = element.transform.GetChild(1).gameObject;
-            _numberToChange = _elementNumber.GetComponent<TMP_Text>();
-            _numberToChange.text = (Random.Range(0, number)).ToString();
-        }
-        foreach (GameObject element in rightList)
-        {
-            TMP_Text _numberToChange;
-            GameObject _elementNumber = element.transform.GetChild(1).gameObject;
-            _numberToChange = _elementNumber.GetComponent<TMP_Text>();
-            _numberToChange.text = (Random.Range(0, number)).ToString();
+            GameObject item_go = Instantiate(PanelPrefab);
+            item_go.transform.GetChild(1).GetComponent<TMP_Text>().text = (Random.Range(0, numberOfItemsToGenerate).ToString());
+            item_go.transform.SetParent(LeftContent);
+            item_go.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
         }
     }
-    public void GenerateContent(int number)
+    public void HoverSpaceForNewPanel(GameObject panelToMove)
     {
-        for (int i = 0; i < number; i++)
-        {
-            CreateElement(PanelPrefab, leftContent.transform, leftList);
-            CreateElement(PanelPrefab, RightContent.transform, rightList);
-        }
+        int targetPanelIndex = panelToMove.transform.GetSiblingIndex();
+        if (IsLeftContent(panelToMove)) BlankPanel = CreateBlankPanel(LeftContent);
+        else BlankPanel = CreateBlankPanel(RightContent);
+        BlankPanel.transform.SetSiblingIndex(targetPanelIndex);
     }
 
-    void CreateElement(GameObject prefab, Transform parent, List<GameObject> list)
+    public bool IsLeftContent(GameObject panel)
     {
-        GameObject NewElement = Instantiate(prefab, parent);
-        DragNDrop NewElementDND = NewElement.GetComponent<DragNDrop>();
-        NewElementDND.Canvas = Canvas;
-        NewElementDND.EmptyElementPrefab = BlankPanelPrefab;
-        list.Add(NewElement);
+        if (panel.transform.parent == LeftContent) return true;
+        else return false;
+    }
+    GameObject CreateBlankPanel(Transform side)
+    {
+        if (BlankPanel == null)
+        {
+            BlankPanel = Instantiate(BlankPanelPrefab, side);
+        }
+        else
+        {
+            Destroy(BlankPanel);
+            BlankPanel = Instantiate(BlankPanelPrefab, side);
+        }
+        return BlankPanel;
+    }
+    public bool IsNotBlankPanel(GameObject panel){
+        if (panel != BlankPanel) return true;
+        else return false;
+    }
+
+    public void AssignToBlankPanel(GameObject panel){
+        panel.transform.SetParent(BlankPanel.transform.parent);
+        panel.transform.SetSiblingIndex(BlankPanel.transform.GetSiblingIndex());
+        Destroy(BlankPanel);
     }
 }
