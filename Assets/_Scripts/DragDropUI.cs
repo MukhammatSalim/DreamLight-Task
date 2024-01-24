@@ -34,12 +34,18 @@ public class DragDropUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
         {
             if (IsNewPanel(raycastResult.gameObject))
             {
-                if (UIManager.IsNotBlankPanel(raycastResult.gameObject))
+                if (!UIManager.IsBlankPanel(raycastResult.gameObject))
                 {
-                    Debug.Log(raycastResult.gameObject);
+                    Debug.Log(raycastResult.gameObject + " is Saved panel");
                     savedPanel = raycastResult.gameObject;
-                    UIManager.HoverSpaceForNewPanel(savedPanel);
+                    UIManager.HoverSpaceForNewPanel(raycastResult.gameObject);
                 }
+            }
+            else if (raycastResult.gameObject == savedPanel)
+            {
+                Debug.Log(raycastResult.gameObject + " is Saved panel");
+                savedPanel = raycastResult.gameObject;
+                UIManager.HoverSpaceForNewPanel(raycastResult.gameObject);
             }
         }
         // else Debug.Log(raycastResult.gameObject + " is not a panel;");

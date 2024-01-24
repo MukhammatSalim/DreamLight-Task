@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour
         int targetPanelIndex = panelToMove.transform.GetSiblingIndex();
         if (IsLeftContent(panelToMove)) BlankPanel = CreateBlankPanel(LeftContent);
         else BlankPanel = CreateBlankPanel(RightContent);
-        BlankPanel.transform.SetSiblingIndex(targetPanelIndex);
+        BlankPanel.transform.SetSiblingIndex(targetPanelIndex + 1);
     }
 
     public bool IsLeftContent(GameObject panel)
