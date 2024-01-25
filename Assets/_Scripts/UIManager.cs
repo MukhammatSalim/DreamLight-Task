@@ -30,10 +30,12 @@ public class UIManager : MonoBehaviour
     }
     void GeneratePanels(GameObject panelPrefab)
     {
+        string stBase = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for (int i = 0; i < numberOfItemsToGenerate; i++)
         {
             GameObject item_go = Instantiate(PanelPrefab);
             item_go.transform.GetChild(1).GetComponent<TMP_Text>().text = (Random.Range(0, numberOfItemsToGenerate).ToString());
+            item_go.transform.GetChild(0).GetComponent<TMP_Text>().text = stBase[Random.Range(0,stBase.Length)].ToString();
             item_go.transform.SetParent(LeftContent);
             item_go.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
         }
@@ -41,6 +43,7 @@ public class UIManager : MonoBehaviour
         {
             GameObject item_go = Instantiate(PanelPrefab);
             item_go.transform.GetChild(1).GetComponent<TMP_Text>().text = (Random.Range(0, numberOfItemsToGenerate).ToString());
+            item_go.transform.GetChild(0).GetComponent<TMP_Text>().text = stBase[Random.Range(0,stBase.Length)].ToString();
             item_go.transform.SetParent(RightContent);
             item_go.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
         }

@@ -58,7 +58,7 @@ public class SortingManager : MonoBehaviour
 
     public void SortByText(bool ascendOrder)
     {
-        
+        DoTextBubbleSort(ascendOrder);
     }
 
 
@@ -91,9 +91,41 @@ public class SortingManager : MonoBehaviour
             }
         }
     }
+    public void DoTextBubbleSort(bool ascendOrder)
+    {
+        if (ascendOrder)
+        {
+            for (int i = 0; i < Content.transform.childCount - 1; i++)
+            {
+                for (int j = 0; j < Content.transform.childCount - i - 1; j++)
+                {
+                    if (String.Compare(GetPanelText(j), GetPanelText(j+1)) == -1)
+                    {
+                        uIManager.Swap(j, j + 1);
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < Content.transform.childCount - 1; i++)
+            {
+                for (int j = 0; j < Content.transform.childCount - i - 1; j++)
+                {
+                    if (String.Compare(GetPanelText(j), GetPanelText(j+1)) == 1)
+                    {
+                        uIManager.Swap(j, j + 1);
+                    }
+                }
+            }
+        }
+    }
     int GetPanelNumber(int panelIndex)
     {
         return Convert.ToInt32(Content.transform.GetChild(panelIndex).GetChild(1).gameObject.GetComponent<TMP_Text>().text);
+    }
+    string GetPanelText(int panelIndex){
+        return Content.transform.GetChild(panelIndex).GetChild(0).gameObject.GetComponent<TMP_Text>().text;
     }
     GameObject getToggleArrowUP(GameObject toggle)
     {
