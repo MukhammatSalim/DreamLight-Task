@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -11,88 +12,88 @@ public class SortingManager : MonoBehaviour
     public GameObject Content;
     public UnityEngine.UI.Toggle TextToggle;
     public UnityEngine.UI.Toggle NumberToggle;
-    List<GameObject> panels = new List<GameObject>();
     public UIManager uIManager;
+    public bool DebugMode;
 
-    private void Start()
-    {
-        for (int i = 0; i < Content.transform.childCount; i++) panels.Add(Content.transform.GetChild(i).gameObject);
-    }
     public void SortPanels()
     {
         Debug.Log("Sorting Started");
-        // GetSortType();
-        Debug.Log("Type has been found");
-        if (isSortingNumber){
+        if (isSortingNumber)
+        {
             if (IsSortingAscend)
             {
-                Debug.Log("The type is: Sort by number in ascending order");
-                SortByNumber(IsSortingAscend);
-            }else {
-                Debug.Log("The type is: Sort by number in Decending order");
+                if (DebugMode) Debug.Log("The type is: Sort by number in ascending order");
                 SortByNumber(IsSortingAscend);
             }
-        } else if (IsSortingAscend)
+            else
             {
-                Debug.Log("The type is: Sort by text in ascending order");
-                SortByText(IsSortingAscend);
-            }else {
-                Debug.Log("The type is: Sort by text in Decending order");
-                SortByText(IsSortingAscend);
+                if (DebugMode) Debug.Log("The type is: Sort by number in Decending order");
+                SortByNumber(IsSortingAscend);
             }
+        }
+        else if (IsSortingAscend)
+        {
+            if (DebugMode) Debug.Log("The type is: Sort by text in ascending order");
+            SortByText(IsSortingAscend);
+        }
+        else
+        {
+            if (DebugMode) Debug.Log("The type is: Sort by text in Decending order");
+            SortByText(IsSortingAscend);
+        }
     }
 
     public void ChangeSortType(UnityEngine.UI.Toggle toggle, bool IsAscend)
     {
-        if(toggle == NumberToggle) isSortingNumber = true;
+        if (toggle == NumberToggle) isSortingNumber = true;
         else isSortingNumber = false;
         IsSortingAscend = IsAscend;
         SortPanels();
-        // if ((getToggleArrowUP(NumberToggle.gameObject).activeInHierarchy) || getToggleArrowDOWN(NumberToggle.gameObject).activeInHierarchy)
-        // {
-        //     isSortingNumber = true;
-        //     if (getToggleArrowUP(NumberToggle.gameObject)) IsSortingAscend = true;
-        //     else IsSortingAscend = false;
-        // }
-        // else if ((getToggleArrowUP(TextToggle.gameObject).activeInHierarchy) || getToggleArrowDOWN(TextToggle.gameObject).activeInHierarchy)
-        // {
-        //     isSortingNumber = false;
-        //     if (getToggleArrowUP(TextToggle.gameObject)) IsSortingAscend = true;
-        //     else IsSortingAscend = false;
-        // }
     }
     public void SortByNumber(bool isAscendOrder)
     {
-        DoBubbleSort();
-        Debug.Log("Bubble sorted");
+        DoNumberBubbleSort(isAscendOrder);
+        if (DebugMode) Debug.Log("Bubble sorted");
     }
 
-    public void SortByText(bool ascendOrder){
-
-    }
-
-    public void Swap(int first, int second)
+    public void SortByText(bool ascendOrder)
     {
-        panels[first].transform.SetSiblingIndex(panels[second].transform.GetSiblingIndex());
-
+        
     }
 
-    public void DoBubbleSort()
+
+    public void DoNumberBubbleSort(bool ascendOrder)
     {
-        for (int i = 0; i < panels.Count - 1; i++)
+        if (ascendOrder)
         {
-            for (int j = 0; j < panels.Count - i - 1; j++)
+            for (int i = 0; i < Content.transform.childCount - 1; i++)
             {
-                if (GetPanelNumber(panels[j]) > (GetPanelNumber(panels[j + 1])))
+                for (int j = 0; j < Content.transform.childCount - i - 1; j++)
                 {
-                    Swap(j, j + 1);
+                    if (GetPanelNumber(j) > (GetPanelNumber(j + 1)))
+                    {
+                        uIManager.Swap(j, j + 1);
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < Content.transform.childCount - 1; i++)
+            {
+                for (int j = 0; j < Content.transform.childCount - i - 1; j++)
+                {
+                    if (GetPanelNumber(j) < (GetPanelNumber(j + 1)))
+                    {
+                        uIManager.Swap(j, j + 1);
+                    }
                 }
             }
         }
     }
-    int GetPanelNumber(GameObject panel)
+    int GetPanelNumber(int panelIndex)
     {
-        return Convert.ToInt32(panel.transform.GetChild(1).gameObject.GetComponent<Text>().text);
+        return Convert.ToInt32(Content.transform.GetChild(panelIndex).GetChild(1).gameObject.GetComponent<TMP_Text>().text);
     }
     GameObject getToggleArrowUP(GameObject toggle)
     {

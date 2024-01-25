@@ -16,6 +16,9 @@ public class UIManager : MonoBehaviour
     [Header("List related")]
     public Transform LeftContent;
     public Transform RightContent;
+    [Header ("List Names")]
+    public TMP_Text SortingListName;
+    public TMP_Text FreeListName;
 
     [Header("Checks")]
     GameObject BlankPanel;
@@ -23,6 +26,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         GeneratePanels(PanelPrefab);
+        UpdateAllLists();
     }
     void GeneratePanels(GameObject panelPrefab)
     {
@@ -116,12 +120,27 @@ public class UIManager : MonoBehaviour
     {
         panel.transform.SetParent(BlankPanel.transform.parent);
         panel.transform.SetSiblingIndex(BlankPanel.transform.GetSiblingIndex());
+        UpdateAllLists();
         Destroy(BlankPanel);
+        
     }
     public bool isViewPort(GameObject obj)
     {
         if ((obj.transform == LeftContent.parent) || (obj.transform == RightContent.parent)) return true;
         else return false;
 
+    }
+    public void Swap(int first, int second)
+    {
+        RightContent.transform.GetChild(first).transform.SetSiblingIndex(RightContent.transform.GetChild(second).GetSiblingIndex());
+
+    }
+    public void UpdateListName(TMP_Text ListName){
+        if (ListName == FreeListName) ListName.text = "Free panels: " + LeftContent.childCount.ToString();
+        else ListName.text = "Sorted panels: " + RightContent.childCount.ToString();
+    }
+    void UpdateAllLists(){
+        UpdateListName(FreeListName);
+        UpdateListName(SortingListName);
     }
 }
