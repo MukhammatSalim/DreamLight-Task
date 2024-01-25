@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     [Header("List related")]
     public Transform LeftContent;
     public Transform RightContent;
-    [Header ("List Names")]
+    [Header("List Names")]
     public TMP_Text SortingListName;
     public TMP_Text FreeListName;
 
@@ -54,12 +54,12 @@ public class UIManager : MonoBehaviour
                 if (IsLeftContent(panelToMove)) BlankPanel = CreateBlankPanel(LeftContent);
                 else BlankPanel = CreateBlankPanel(RightContent);
             }
-            else if (IsLeftContent(panelToMove)) 
+            else if (IsLeftContent(panelToMove))
             {
                 BlankPanel.transform.SetParent(LeftContent);
                 BlankPanel.transform.SetSiblingIndex(LeftContent.childCount - 1);
             }
-            else 
+            else
             {
                 BlankPanel.transform.SetParent(RightContent);
                 BlankPanel.transform.SetSiblingIndex(RightContent.childCount - 1);
@@ -75,12 +75,12 @@ public class UIManager : MonoBehaviour
                 if (IsLeftContent(panelToMove)) BlankPanel = CreateBlankPanel(LeftContent);
                 else BlankPanel = CreateBlankPanel(RightContent);
             }
-            else if (IsLeftContent(panelToMove)) 
+            else if (IsLeftContent(panelToMove))
             {
                 BlankPanel.transform.SetParent(LeftContent);
                 BlankPanel.transform.SetSiblingIndex(targetPanelIndex);
             }
-            else 
+            else
             {
                 BlankPanel.transform.SetParent(RightContent);
                 BlankPanel.transform.SetSiblingIndex(targetPanelIndex);
@@ -93,7 +93,7 @@ public class UIManager : MonoBehaviour
     {
         if (panel.transform == LeftContent.parent) return true;
         else if (panel.transform == RightContent.parent) return false;
-        
+
         if (panel.transform.parent == LeftContent) return true;
         else return false;
     }
@@ -122,7 +122,7 @@ public class UIManager : MonoBehaviour
         panel.transform.SetSiblingIndex(BlankPanel.transform.GetSiblingIndex());
         UpdateAllLists();
         Destroy(BlankPanel);
-        
+
     }
     public bool isViewPort(GameObject obj)
     {
@@ -135,12 +135,38 @@ public class UIManager : MonoBehaviour
         RightContent.transform.GetChild(first).transform.SetSiblingIndex(RightContent.transform.GetChild(second).GetSiblingIndex());
 
     }
-    public void UpdateListName(TMP_Text ListName){
+    public void UpdateListName(TMP_Text ListName)
+    {
         if (ListName == FreeListName) ListName.text = "Free panels: " + LeftContent.childCount.ToString();
         else ListName.text = "Sorted panels: " + RightContent.childCount.ToString();
     }
-    void UpdateAllLists(){
+    void UpdateAllLists()
+    {
         UpdateListName(FreeListName);
         UpdateListName(SortingListName);
     }
+    void ClearContent(Transform content)
+    {
+        foreach(Transform child in content)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+    public void ClearAllPanels()
+    {
+        ClearContent(LeftContent);
+        ClearContent(RightContent);
+
+    }
+    public void LoadPanel(PanelData panelData)
+    {
+        GameObject item_go = Instantiate(PanelPrefab);
+        item_go.transform.GetChild(0).GetComponent<TMP_Text>().text = panelData.PanelText;
+        item_go.transform.GetChild(1).GetComponent<TMP_Text>().text = panelData.PanelNumber;
+        item_go.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
+        if (panelData.side == "left") item_go.transform.SetParent(LeftContent);
+        else item_go.transform.SetParent(RightContent);
+        item_go.transform.SetSiblingIndex(panelData.Index);
+    }
+
 }
