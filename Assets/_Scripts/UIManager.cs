@@ -33,17 +33,63 @@ public class UIManager : MonoBehaviour
             item_go.transform.SetParent(LeftContent);
             item_go.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
         }
+        for (int i = 0; i < numberOfItemsToGenerate; i++)
+        {
+            GameObject item_go = Instantiate(PanelPrefab);
+            item_go.transform.GetChild(1).GetComponent<TMP_Text>().text = (Random.Range(0, numberOfItemsToGenerate).ToString());
+            item_go.transform.SetParent(RightContent);
+            item_go.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
+        }
     }
     public void HoverSpaceForNewPanel(GameObject panelToMove)
     {
-        int targetPanelIndex = panelToMove.transform.GetSiblingIndex();
-        if (IsLeftContent(panelToMove)) BlankPanel = CreateBlankPanel(LeftContent);
-        else BlankPanel = CreateBlankPanel(RightContent);
-        BlankPanel.transform.SetSiblingIndex(targetPanelIndex + 1);
+        if (isViewPort(panelToMove))
+        {
+            if (BlankPanel == null)
+            {
+                if (IsLeftContent(panelToMove)) BlankPanel = CreateBlankPanel(LeftContent);
+                else BlankPanel = CreateBlankPanel(RightContent);
+            }
+            else if (IsLeftContent(panelToMove)) 
+            {
+                BlankPanel.transform.SetParent(LeftContent);
+                BlankPanel.transform.SetSiblingIndex(LeftContent.childCount - 1);
+            }
+            else 
+            {
+                BlankPanel.transform.SetParent(RightContent);
+                BlankPanel.transform.SetSiblingIndex(RightContent.childCount - 1);
+            }
+
+        }
+        else
+        {
+            int targetPanelIndex = panelToMove.transform.GetSiblingIndex();
+
+            if (BlankPanel == null)
+            {
+                if (IsLeftContent(panelToMove)) BlankPanel = CreateBlankPanel(LeftContent);
+                else BlankPanel = CreateBlankPanel(RightContent);
+            }
+            else if (IsLeftContent(panelToMove)) 
+            {
+                BlankPanel.transform.SetParent(LeftContent);
+                BlankPanel.transform.SetSiblingIndex(targetPanelIndex);
+            }
+            else 
+            {
+                BlankPanel.transform.SetParent(RightContent);
+                BlankPanel.transform.SetSiblingIndex(targetPanelIndex);
+            }
+            Debug.Log("Blank panel is on sibling index " + targetPanelIndex);
+        }
     }
 
     public bool IsLeftContent(GameObject panel)
     {
+        if (panel.transform == LeftContent.parent) return true;
+        else if (panel.transform == RightContent.parent) return false;
+        
         if (panel.transform.parent == LeftContent) return true;
         else return false;
     }
@@ -60,14 +106,22 @@ public class UIManager : MonoBehaviour
         }
         return BlankPanel;
     }
-    public bool IsNotBlankPanel(GameObject panel){
-        if (panel != BlankPanel) return true;
+    public bool IsBlankPanel(GameObject panel)
+    {
+        if (panel == BlankPanel) return true;
         else return false;
     }
 
-    public void AssignToBlankPanel(GameObject panel){
+    public void AssignToBlankPanel(GameObject panel)
+    {
         panel.transform.SetParent(BlankPanel.transform.parent);
         panel.transform.SetSiblingIndex(BlankPanel.transform.GetSiblingIndex());
         Destroy(BlankPanel);
+    }
+    public bool isViewPort(GameObject obj)
+    {
+        if ((obj.transform == LeftContent.parent) || (obj.transform == RightContent.parent)) return true;
+        else return false;
+
     }
 }

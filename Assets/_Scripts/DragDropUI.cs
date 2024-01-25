@@ -14,7 +14,6 @@ public class DragDropUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
     Image image;
 
     [Header("Checking ")]
-    GameObject savedPanel = null;
     public string panelTag = "UI_Element";
 
     void Awake()
@@ -32,30 +31,22 @@ public class DragDropUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
         if (IsPanel(raycastResult.gameObject))
         {
-            if (IsNewPanel(raycastResult.gameObject))
+            if (!UIManager.IsBlankPanel(raycastResult.gameObject))
             {
-                if (!UIManager.IsBlankPanel(raycastResult.gameObject))
-                {
-                    Debug.Log(raycastResult.gameObject + " is Saved panel");
-                    savedPanel = raycastResult.gameObject;
-                    UIManager.HoverSpaceForNewPanel(raycastResult.gameObject);
-                }
-            }
-            else if (raycastResult.gameObject == savedPanel)
-            {
-                Debug.Log(raycastResult.gameObject + " is Saved panel");
-                savedPanel = raycastResult.gameObject;
                 UIManager.HoverSpaceForNewPanel(raycastResult.gameObject);
             }
         }
-        // else Debug.Log(raycastResult.gameObject + " is not a panel;");
+        else if (UIManager.isViewPort(raycastResult.gameObject))
+        {
+            Debug.Log("This is a ViewPort! Hovering new space!");
+            UIManager.HoverSpaceForNewPanel(raycastResult.gameObject);
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         UIManager.HoverSpaceForNewPanel(gameObject);
         gameObject.transform.SetParent(UIManager.transform.GetChild(0));
-        RaycastResult raycastResult = eventData.pointerCurrentRaycast;
         offset = transform.position - Input.mousePosition;
 
         image.maskable = false;
@@ -68,12 +59,6 @@ public class DragDropUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
         image.maskable = true;
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
-    }
-
-    bool IsNewPanel(GameObject panel)
-    {
-        if (panel != savedPanel) return true;
-        else return false;
     }
     bool IsPanel(GameObject obj)
     {
