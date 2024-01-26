@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-
 public class DragDropUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     [Header("Connections")]
@@ -14,7 +13,7 @@ public class DragDropUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
     Image image;
 
     [Header("Checking ")]
-    public string panelTag = "UI_Element";
+    [SerializeField] string panelTag = "UI_Element";
 
     void Awake()
     {
@@ -46,7 +45,7 @@ public class DragDropUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
     public void OnPointerDown(PointerEventData eventData)
     {
         UIManager.HoverSpaceForNewPanel(gameObject);
-        gameObject.transform.SetParent(UIManager.transform.GetChild(0));
+        DetachToCanvas(gameObject);
         offset = transform.position - Input.mousePosition;
 
         image.maskable = false;
@@ -64,6 +63,9 @@ public class DragDropUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
     {
         if (obj.tag == panelTag) return true;
         else return false;
+    }
+    void DetachToCanvas(GameObject obj){
+        obj.transform.SetParent(UIManager.transform.GetChild(0));
     }
 }
 

@@ -1,33 +1,25 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
-  
 
-  
 public class SaveLoadJSON : MonoBehaviour
 {
-    PanelData panelData;
     string saveFilePath;
     public UIManager uIManager;
-  
+    public bool Debugging;
+
     void Start()
-    {  
+    {
         saveFilePath = Application.persistentDataPath + "/PanelData.json";
     }
-  
-    void Update()
-    {
-    }
-  
     public void SaveGame()
     {
         GameObject[] allPanels = GameObject.FindGameObjectsWithTag("UI_Element");
-        string dataString = "";
         List<PanelData> allPanelsData = new List<PanelData>();
-        foreach(GameObject panel in allPanels){
+        foreach (GameObject panel in allPanels)
+        {
             allPanelsData.Add(ConvertPanelToData(panel));
         }
         PanelData[] panelDatas = allPanelsData.ToArray();
@@ -35,12 +27,11 @@ public class SaveLoadJSON : MonoBehaviour
         string savedPanelDataString = JsonHelper.ToJson(panelDatas, true);
         File.WriteAllText(saveFilePath, savedPanelDataString);
 
-        Debug.Log("Number of saved panels" + allPanels.Length);
-        Debug.Log("Save file created at: " + saveFilePath);
-        Debug.Log("Saved string is " + dataString);
-        Debug.Log("Final data is " + savedPanelDataString);
+        if(Debugging) Debug.Log("Number of saved panels" + allPanels.Length);
+        if(Debugging) Debug.Log("Save file created at: " + saveFilePath);
+        if(Debugging) Debug.Log("Final data is " + savedPanelDataString);
     }
-  
+
     public void LoadGame()
     {
         if (File.Exists(saveFilePath))
@@ -48,28 +39,30 @@ public class SaveLoadJSON : MonoBehaviour
             string loadPanelData = File.ReadAllText(saveFilePath);
             PanelData[] panelDatas = JsonHelper.FromJson<PanelData>(loadPanelData);
             uIManager.ClearAllPanels();
-            for(int i = 0; i <panelDatas.Length; i++){
+            for (int i = 0; i < panelDatas.Length; i++)
+            {
                 uIManager.LoadPanel(panelDatas[i]);
             }
 
         }
         else
-            Debug.Log("There is no save files to load!");
-  
+            if(Debugging) Debug.Log("There is no save files to load!");
+
     }
-  
+
     public void DeleteSaveFile()
     {
         if (File.Exists(saveFilePath))
         {
             File.Delete(saveFilePath);
-  
-            Debug.Log("Save file deleted!");
+
+            if(Debugging) Debug.Log("Save file deleted!");
         }
         else
-            Debug.Log("There is nothing to delete!");
+            if(Debugging) Debug.Log("There is nothing to delete!");
     }
-    PanelData ConvertPanelToData(GameObject panel){
+    PanelData ConvertPanelToData(GameObject panel)
+    {
         PanelData newPanelData = new PanelData();
         newPanelData.Index = panel.transform.GetSiblingIndex();
         if (uIManager.IsLeftContent(panel)) newPanelData.side = "left";

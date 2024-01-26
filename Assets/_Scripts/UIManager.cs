@@ -1,9 +1,5 @@
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 public class UIManager : MonoBehaviour
 {
     [Header("Content Generation")]
@@ -13,7 +9,7 @@ public class UIManager : MonoBehaviour
     public GameObject PanelPrefab;
     public GameObject BlankPanelPrefab;
 
-    [Header("List related")]
+    [Header("Lists")]
     public Transform LeftContent;
     public Transform RightContent;
     [Header("List Names")]
@@ -33,19 +29,19 @@ public class UIManager : MonoBehaviour
         string stBase = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for (int i = 0; i < numberOfItemsToGenerate; i++)
         {
-            GameObject item_go = Instantiate(PanelPrefab);
-            item_go.transform.GetChild(1).GetComponent<TMP_Text>().text = (Random.Range(0, numberOfItemsToGenerate).ToString());
-            item_go.transform.GetChild(0).GetComponent<TMP_Text>().text = stBase[Random.Range(0,stBase.Length)].ToString();
-            item_go.transform.SetParent(LeftContent);
-            item_go.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
+            GameObject newPanel = Instantiate(PanelPrefab);
+            newPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = (Random.Range(0, numberOfItemsToGenerate).ToString());
+            newPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = stBase[Random.Range(0, stBase.Length)].ToString();
+            newPanel.transform.SetParent(LeftContent);
+            newPanel.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
         }
         for (int i = 0; i < numberOfItemsToGenerate; i++)
         {
-            GameObject item_go = Instantiate(PanelPrefab);
-            item_go.transform.GetChild(1).GetComponent<TMP_Text>().text = (Random.Range(0, numberOfItemsToGenerate).ToString());
-            item_go.transform.GetChild(0).GetComponent<TMP_Text>().text = stBase[Random.Range(0,stBase.Length)].ToString();
-            item_go.transform.SetParent(RightContent);
-            item_go.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
+            GameObject newPanel = Instantiate(PanelPrefab);
+            newPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = (Random.Range(0, numberOfItemsToGenerate).ToString());
+            newPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = stBase[Random.Range(0, stBase.Length)].ToString();
+            newPanel.transform.SetParent(RightContent);
+            newPanel.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
         }
     }
     public void HoverSpaceForNewPanel(GameObject panelToMove)
@@ -150,7 +146,7 @@ public class UIManager : MonoBehaviour
     }
     void ClearContent(Transform content)
     {
-        foreach(Transform child in content)
+        foreach (Transform child in content)
         {
             Destroy(child.gameObject);
         }
@@ -163,13 +159,13 @@ public class UIManager : MonoBehaviour
     }
     public void LoadPanel(PanelData panelData)
     {
-        GameObject item_go = Instantiate(PanelPrefab);
-        item_go.transform.GetChild(0).GetComponent<TMP_Text>().text = panelData.PanelText;
-        item_go.transform.GetChild(1).GetComponent<TMP_Text>().text = panelData.PanelNumber;
-        item_go.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
-        if (panelData.side == "left") item_go.transform.SetParent(LeftContent);
-        else item_go.transform.SetParent(RightContent);
-        item_go.transform.SetSiblingIndex(panelData.Index);
+        GameObject newPanel = Instantiate(PanelPrefab);
+        newPanel.transform.GetChild(0).GetComponent<TMP_Text>().text = panelData.PanelText;
+        newPanel.transform.GetChild(1).GetComponent<TMP_Text>().text = panelData.PanelNumber;
+        newPanel.GetComponent<DragDropUI>().UIManager = gameObject.GetComponent<UIManager>();
+        if (panelData.side == "left") newPanel.transform.SetParent(LeftContent);
+        else newPanel.transform.SetParent(RightContent);
+        newPanel.transform.SetSiblingIndex(panelData.Index);
     }
 
 }
