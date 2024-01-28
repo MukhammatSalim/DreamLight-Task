@@ -19,6 +19,11 @@ public class UIManager : MonoBehaviour
     [Header("Checks")]
     GameObject BlankPanel;
 
+    public void Regenerate(){
+        ClearAllPanels();
+        GeneratePanels(PanelPrefab);
+        UpdateAllLists();
+    }
     private void Start()
     {
         GeneratePanels(PanelPrefab);
@@ -166,6 +171,10 @@ public class UIManager : MonoBehaviour
         if (panelData.side == "left") newPanel.transform.SetParent(LeftContent);
         else newPanel.transform.SetParent(RightContent);
         newPanel.transform.SetSiblingIndex(panelData.Index);
+    }
+
+    public void ExitGame(){
+        Application.Quit();
     }
 
 }

@@ -8,7 +8,7 @@ public class SaveLoadJSON : MonoBehaviour
 {
     string saveFilePath;
     public UIManager uIManager;
-    public bool Debugging;
+    public bool DebugMode;
 
     void Start()
     {
@@ -27,9 +27,9 @@ public class SaveLoadJSON : MonoBehaviour
         string savedPanelDataString = JsonHelper.ToJson(panelDatas, true);
         File.WriteAllText(saveFilePath, savedPanelDataString);
 
-        if(Debugging) Debug.Log("Number of saved panels" + allPanels.Length);
-        if(Debugging) Debug.Log("Save file created at: " + saveFilePath);
-        if(Debugging) Debug.Log("Final data is " + savedPanelDataString);
+        if(DebugMode) Debug.Log("Number of saved panels" + allPanels.Length);
+        if(DebugMode) Debug.Log("Save file created at: " + saveFilePath);
+        if(DebugMode) Debug.Log("Final data is " + savedPanelDataString);
     }
 
     public void LoadGame()
@@ -46,7 +46,7 @@ public class SaveLoadJSON : MonoBehaviour
 
         }
         else
-            if(Debugging) Debug.Log("There is no save files to load!");
+            if(DebugMode) Debug.Log("There is no save files to load!");
 
     }
 
@@ -56,10 +56,10 @@ public class SaveLoadJSON : MonoBehaviour
         {
             File.Delete(saveFilePath);
 
-            if(Debugging) Debug.Log("Save file deleted!");
+            if(DebugMode) Debug.Log("Save file deleted!");
         }
         else
-            if(Debugging) Debug.Log("There is nothing to delete!");
+            if(DebugMode) Debug.Log("There is nothing to delete!");
     }
     PanelData ConvertPanelToData(GameObject panel)
     {
